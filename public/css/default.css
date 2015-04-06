@@ -1,0 +1,53 @@
+body {
+  padding-top: 70px;
+  padding-bottom: 30px;
+}
+
+.theme-dropdown .dropdown-menu {
+  position: static;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+  width: auto;
+}
+
+.hidden-form {
+	display: none;
+
+}
+
+.banner{
+
+	
+
+}
+
+.banner-img{
+width: 100%;
+margin-top: -65px;
+	
+	
+}
+.fondue{
+	background-color: #eee;
+	margin-top: 10px;
+
+}
+
+.fondue:hover{
+	background-color: #b3b3b3;
+	margin-top: 10px;
+
+}
+
+.contact-img{
+	margin-bottom:5px; 
+}
+.banner-frame{
+}
