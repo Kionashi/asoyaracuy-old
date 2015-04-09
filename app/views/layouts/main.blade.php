@@ -65,7 +65,7 @@ $(function(){
   <body role="document">
  <div class="container" role="main">  
     <div class="row banner-frame">
-    	<div class="col-md-12"><img class= "img-responsive banner-img" src="http://tepuchamoy.com.ve/asoyaracuy/public/images/banner2.png"></div>
+    	<div class="col-md-12">{{ HTML::image('images/banner2.png', 'a picture', array('class' => 'img-responsive banner-img')) }}</div>
     <!--	<div class="col-md-12"><h1><b>Asoyaracuy</b></h1></div>-->
     </div>
 

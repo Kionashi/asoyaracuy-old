@@ -2,14 +2,11 @@
 @section('content')
 
   {{Form::open(array('action' => 'AdminController@addcarousel','files'=>true)) }}
-  {{ Form::label('file','File',array('id'=>'','class'=>'')) }}
+  {{ Form::label('file','Subir Imagen',array('id'=>'','class'=>'')) }}
   {{ Form::file('file','',array('id'=>'','class'=>'')) }}
   <br/>
   <!-- submit buttons -->
-  {{ Form::submit('Save') }}
-  
-  <!-- reset buttons -->
-  {{ Form::reset('Reset') }}
+  {{ Form::submit('Guardar') }}
   
   {{ Form::close() }}
 

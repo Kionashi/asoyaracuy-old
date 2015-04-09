@@ -13,7 +13,8 @@
     <title>Asoyaracuy</title>
   </head>
   <body>    
-      	<row><div class="col-md-2"></div><div class="col-md-8"><img class= "img-responsive banner-img" src="http://tepuchamoy.com.ve/asoyaracuy/public/images/banner2.png">    <marquee>Asociacion civil sin fines de lucro de la calle Yaracuy El Marques</marquee>
+      	<row><div class="col-md-2"></div><div class="col-md-8">{{ HTML::image('images/banner2.png', 'a picture', array('class' => 'img-responsive banner-img')) }}
+            <marquee>Asociacion civil sin fines de lucro de la calle Yaracuy El Marques</marquee>
 </div><div class="col-md-2"></div></row>
 
     <row><div class="col-md-4"></div>
