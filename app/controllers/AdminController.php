@@ -308,6 +308,58 @@ class AdminController extends BaseController {
         }  
     }    
 
+    public function showSpecialFees()
+    {
+        $menu_home = array(
+            'home'                  => 'active',
+            'admin_users'           => '',
+            'admin_content'         => '',
+            'admin_payments'        => '',
+            'privates_documents'    => ''
+        );
+        $menu_users = array(
+            'home'                  => '',
+            'admin_users'           => 'active',
+            'admin_content'         => '',
+            'admin_payments'        => '',
+            'privates_documents'    => ''
+        );
+        $menu_content = array(
+            'home'                  => '',
+            'admin_users'           => '',
+            'admin_content'         => 'active',
+            'admin_payments'        => '',
+            'privates_documents'    => ''
+        );
+        $menu_payments = array(
+            'home'                  => '',
+            'admin_users'           => '',
+            'admin_content'         => '',
+            'admin_payments'        => 'active',
+            'privates_documents'    => ''
+        );
+        $menu_documents = array(
+            'home'                  => '',
+            'admin_users'           => '',
+            'admin_content'         => '',
+            'admin_payments'        => '',
+            'privates_documents'    => 'active'
+        );       
+        $adminid = Auth::id(); 
+        $man = DB::table('users')->where('id','=',$adminid)->first();
+        if($man->power == 4 || $man->power == 2)
+        {
+            $users = DB::table('users')
+                ->leftJoin('specialfees', 'users.id', '=', 'specialfees.userid')
+                ->get(); 
+            //echo "<pre>";print_r($users);echo "</pre>";die;
+            return View::make('admin.specialfees', ['users' => $users, 'menu' => $menu_payments]);
+        }else{
+            return View::make('admin.home',['menu' => $menu_home, 'response' => 'No tienes los permisos para acceder a esta area'] );
+        }          
+
+    }
+
     public function addcarousel()
     {
         $menu_home = array(
@@ -354,6 +406,10 @@ class AdminController extends BaseController {
         $path = $subpath.$name;
         //$path = $subpath.$name;
         DB::insert('insert into carrousel (path, name) values (?,?)', array($path,$name));
+        $id = Auth::id();
+        $action = 'Subir elemento del carrusel al servidor';
+        $value = $name;
+        $this->setHistory($id,$action,$value);
         $files = DB::table('carrousel')->get();
         return View::make('admin.content',['files' => $files, 'menu' => $menu_content]);
     } 
@@ -412,6 +468,10 @@ class AdminController extends BaseController {
         DB::table('contactgroups')->insert(
             array('group' => $group, 'name' => $name2, 'path' => $path, 'email' => $email, 'description' => $description)
         );
+        $id = Auth::id();
+        $action = 'Agregar Nuevo Contacto';
+        $value = $email;
+        $this->setHistory($id,$action,$value);         
         //DB::insert('insert into contactgroups (group, name, path, email, description) values (?,?,?,?,?)', array($group,$name2, $path, $email, $description));
         $members = DB::table('contactgroups')->get();
         return View::make('admin.members',['members' => $members, 'menu' => $menu_content]);
@@ -461,6 +521,10 @@ class AdminController extends BaseController {
         //Input::file('file')->move($subpath,$newname);
         $path = $subpath.$name;
         DB::insert('insert into documents (route, name) values (?,?)', array($path,$name));
+        $id = Auth::id();
+        $action = 'Subir archivo al servidor';
+        $value = $name;
+        $this->setHistory($id,$action,$value);        
         $files = DB::table('documents')->get();
         return View::make('admin.documents',['files' => $files, 'menu' => $menu_documents]);
     }
@@ -508,6 +572,10 @@ class AdminController extends BaseController {
         $name = Input::get('name');
         $category = Input::get('category');
         DB::insert('insert into documents (route,name,category) values(?,?,?)', array($url, $name, $category));
+        $id = Auth::id();
+        $action = 'Agregar un nuevo enlace de documento al servidor';
+        $value = $name;
+        $this->setHistory($id,$action,$value);        
         $files = DB::table('documents')->get();
         return View::make('admin.documents',['files' => $files,'menu' => $menu_documents]);
     }
@@ -561,6 +629,10 @@ class AdminController extends BaseController {
         $newfee->value = $value;
         $newfee->status = 1;
         $newfee->save();
+
+        $id = Auth::id();
+        $action = 'Modificar tarifa';
+        $this->setHistory($id,$action,$value);        
 
         $flee = DB::table('fees')->where('status','=','1')->first();
         return View::make('admin.fees',['fee' =>$flee, 'menu' => $menu_payments]);
@@ -618,6 +690,10 @@ class AdminController extends BaseController {
             $debug->value = $value;
             $debug->save();
         }
+        $id = Auth::id();
+        $action = 'Crear/Modificar tarifa especial';
+        $data = $user.' '.$value;
+        $this->setHistory($id,$action,$data);
         $response = 'tarifa especial creada';
         return View::make('admin.home',['response' =>$response, 'menu' => $menu_home]);
     }     
@@ -711,6 +787,52 @@ class AdminController extends BaseController {
 
         return View::make('admin.member', ['member' => $member,'menu' => $menu_content]);
     }
+public function searchSpecialFeeUsers()
+    {
+        $menu_home = array(
+            'home'                  => 'active',
+            'admin_users'           => '',
+            'admin_content'         => '',
+            'admin_payments'        => '',
+            'privates_documents'    => ''
+        );
+        $menu_users = array(
+            'home'                  => '',
+            'admin_users'           => 'active',
+            'admin_content'         => '',
+            'admin_payments'        => '',
+            'privates_documents'    => ''
+        );
+        $menu_content = array(
+            'home'                  => '',
+            'admin_users'           => '',
+            'admin_content'         => 'active',
+            'admin_payments'        => '',
+            'privates_documents'    => ''
+        );
+        $menu_payments = array(
+            'home'                  => '',
+            'admin_users'           => '',
+            'admin_content'         => '',
+            'admin_payments'        => 'active',
+            'privates_documents'    => ''
+        );
+        $menu_documents = array(
+            'home'                  => '',
+            'admin_users'           => '',
+            'admin_content'         => '',
+            'admin_payments'        => '',
+            'privates_documents'    => 'active'
+        );
+
+        $house = Input::get('busqueda'); 
+        //$users = DB::table('users')->where('house','=',$house)->first();
+        $users = DB::table('users')
+                ->where('house','=',$house)
+                ->leftJoin('specialfees', 'users.id', '=', 'specialfees.userid')
+                ->get();
+        return View::make('admin.user', ['results' => $results,'menu' => $menu_users]);
+    }    
     public function custompayment()
     {
         $menu_home = array(
@@ -803,28 +925,37 @@ class AdminController extends BaseController {
 		    	//echo $id;
 		    	$combo_id = 'combo'.$id;
                 $box_id = 'box'.$id;
-		    	echo $combo_id;
+		    	//echo $combo_id;
 		    	$checkbox = Input::get($combo_id);
 		    	//var_dump($checkbox);
 		   
 		    	if($value == 'aprove')
-		    	{ 	
+		    	{ 	                    
 		    		if(Input::get($box_id) === $combo_id)
 		    		{
 		    			
 		    			DB::table('payments')
 		            	->where('id',$id)
-		            	->update(array('state' => 'Aprobado'));	
+		            	->update(array('state' => 'Aprobado'));
+
+                        $Autorid = Auth::id();
+                        $action = 'Aprobar pago';
+                        $value = $id;
+                        $this->setHistory($Autorid,$action,$value);	
 		    		}				
 		             
 		    	}else if($value == 'disaprove')
 		    	{	
 		    		if(Input::get($box_id) === $combo_id)
 		    		{
-		    			echo 'adios';
+		    			//echo 'adios';
 		    			DB::table('payments')
 		            	->where('id',$id)
 		            	->update(array('state' => 'Rechazado'));	
+                        $Autorid = Auth::id();
+                        $action = 'Rechazar pago';
+                        $value = $id;
+                        $this->setHistory($Autorid,$action,$value);
 		    		}
 		    	}
     		}
@@ -895,7 +1026,11 @@ class AdminController extends BaseController {
                         $miembro =DB::table('contactgroups')->where('id',$id)->first(); 
                         $pathy = $miembro->path;
                         File::delete($pathy);
-                        DB::table('contactgroups')->where('id', '=', $id)->delete();   
+                        DB::table('contactgroups')->where('id', '=', $id)->delete();  
+                        $Autorid = Auth::id();
+                        $action = 'Eliminar Contacto';
+                        $value = $id;
+                        $this->setHistory($Autorid,$action,$value);                         
                     }              
                 }
             }
@@ -969,6 +1104,10 @@ class AdminController extends BaseController {
                         DB::table('carrousel')
                         ->where('id',$id)
                         ->update(array('state' => 'Adentro')); 
+                        $Autorid = Auth::id();
+                        $action = 'Agregar elemento al carrusel';
+                        $value = $id;
+                        $this->setHistory($Autorid,$action,$value);                        
                     }               
                      
                 }else if($value == 'extend')
@@ -978,7 +1117,11 @@ class AdminController extends BaseController {
                         
                         DB::table('carrousel')
                         ->where('id',$id)
-                        ->update(array('state' => 'Afuera'));    
+                        ->update(array('state' => 'Afuera'));
+                        $Autorid = Auth::id();
+                        $action = 'Sacar elemento del carrusel';
+                        $value = $id;
+                        $this->setHistory($Autorid,$action,$value);                            
                     }
                 }else if($value == 'delete')
                 {   
@@ -987,7 +1130,11 @@ class AdminController extends BaseController {
                         $fily = DB::table('carrousel')->where('id', '=', $id)->first();
                         $pathy = $fily->path;
                         File::delete($pathy);
-                        DB::table('carrousel')->where('id', '=', $id)->delete();    
+                        DB::table('carrousel')->where('id', '=', $id)->delete();  
+                        $Autorid = Auth::id();
+                        $action = 'Eliminar archivo del carrusel';
+                        $value = $id;
+                        $this->setHistory($Autorid,$action,$value);                          
                     }
                 }
             }        
@@ -1054,12 +1201,17 @@ class AdminController extends BaseController {
            
                 if($value == 'publico')
                 {   
+
                     if(Input::get($box_id) === $combo_id)
                     {
-                        
+                       
                         DB::table('documents')
                         ->where('id',$id)
                         ->update(array('state' => 'Público')); 
+                        $Autorid = Auth::id();
+                        $action = 'Marcar documento como Publico';
+                        $value = $id;
+                        $this->setHistory($Autorid,$action,$value);                        
                     }               
                      
                 }else if($value == 'private')
@@ -1070,6 +1222,10 @@ class AdminController extends BaseController {
                         DB::table('documents')
                         ->where('id',$id)
                         ->update(array('state' => 'Privado'));    
+                        $Autorid = Auth::id();
+                        $action = 'Marcar documento como privado';
+                        $value = $id;
+                        $this->setHistory($Autorid,$action,$value);
                     }
                 }else if($value == 'delete')
                 {   
@@ -1079,6 +1235,10 @@ class AdminController extends BaseController {
                         $pathy = $fily->route;
                         File::delete($pathy);
                         DB::table('documents')->where('id', '=', $id)->delete();    
+                        $Autorid = Auth::id();
+                        $action = 'Eliminar documento';
+                        $value = $id;
+                        $this->setHistory($Autorid,$action,$value);
                     }
                 }
             }        
@@ -1218,6 +1378,10 @@ class AdminController extends BaseController {
         );
     	$house = Input::get('house');
     	DB::table('users')->where('house', '=', $house)->delete();
+        $Autorid = Auth::id();
+        $action = 'Eliminar Usuario';
+        $value = $house;
+        $this->setHistory($Autorid,$action,$value);        
     	//showUsers();
         $users = DB::table('users')->where('id','>','1')->get();
         
@@ -1270,6 +1434,10 @@ class AdminController extends BaseController {
         {
             $delete = SpecialFee::where('userid','=',$id)->delete();
             $response = 'tarifa especial borrada';
+            $Autorid = Auth::id();
+            $action = 'Eliminar tarifa especial';
+            $value = $id;
+            $this->setHistory($Autorid,$action,$value);                
         }else if ($specialfee == NULL)
         {
             $response ='no se encontro ninguna tarifa especial';
@@ -1322,6 +1490,9 @@ class AdminController extends BaseController {
         $group = Input::get('group');
         DB::table('contactgroups')->where('group', '=', $group)->delete();
         $adminid = Auth::id(); 
+        $action = 'Eliminar Contacto';
+        $value = $group;
+        $this->setHistory($adminid,$action,$value);            
         $man = DB::table('users')->where('id','=',$adminid)->first();        
         $members = DB::table('contactgroups')->get();
         if($man->power == 3 || $man->power == 2)
@@ -1509,9 +1680,10 @@ class AdminController extends BaseController {
         $users = User::all();
         $specials = SpecialFee::all();
         $fee = DB::table('fees')->where('status','=','1')->first();
-        $realfee = $fee->value;
+        
         foreach($users as $user) 
-        { 
+        {
+        $realfee = $fee->value; 
             foreach($specials as $special)
             {
                 if($user->id == $special->userid)
@@ -1522,9 +1694,32 @@ class AdminController extends BaseController {
             $balance = $user->balance - $realfee;
             $user->balance = $balance;
             $user->save();
+             
         }
+        $Autorid = Auth::id();
+        $action = 'Aplicar Tarifa';
+        $value = 'N/A' ;
+        $this->setHistory($Autorid,$action,$value);               
         return View::make('admin.home',['menu' => $menu_home] );    
     }
+
+    public function setHistory($id,$action,$value)
+    {
+        $user= DB::table('users')->where ('id','=',$id)->first();
+        $autor = $user->name;
+        $action = $action;
+        $value = $value;
+        $date = getdate();
+
+        $history = new History;
+        $history->autor = $autor;
+        $history->action = $action;
+        $history->value = $value;
+        $history->save();
+
+        return $history;
+    }
+
 
 
 }

@@ -20,15 +20,12 @@ Route::get('/home','HomeController@showHome')->before('auth');
 Route::get('/admin/home','SessionsController@showAdminHome')->before('auth');
 Route::get('/debug',function()
 {
-	$user = new User;
-
-	$user->password = Hash::make(Input::get('email'));
-	$user->email = 'anahual_garivaldi@hotmail.com';
-	$user->house = 'Mis Padres';
-	$user->phone = '0412269211898';
-	$user-> save();
-
-	return Redirect::to('/users/index');
+        $users = User::all();
+        foreach($users as $user)
+        {
+            $user->balance = 0;
+            $user->save();            
+        }  
 });
 
 
@@ -52,6 +49,7 @@ Route::get('/documents','HomeController@showDocuments')->before('auth');
 Route::get('/admin/private','AdminController@showPrivateDocuments')->before('auth');
 Route::get('/home/download/{id}','HomeController@downloadfile')->before('auth');
 Route::get('/admin/fee/','AdminController@showFee')->before('auth');
+Route::get('/admin/specialfees/','AdminController@showSpecialFees')->before('auth');
 Route::get('/documents/meetings','HomeController@showMeetings')->before('auth');
 Route::get('/documents/organization','HomeController@showOrganization')->before('auth');
 Route::get('/documents/intercom','HomeController@showIntercom')->before('auth');

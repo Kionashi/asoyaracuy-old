@@ -42,6 +42,7 @@
                 <li><?php echo link_to("/admin/payments/",'Pagos pendientes'); ?></li>
                 <li><?php echo link_to("/admin/paymenthistory/",'Historial de Pagos'); ?></li>
                 <li><?php echo link_to("/admin/fee/",'Gestionar Mensualidad'); ?></li>
+                <li><?php echo link_to("/admin/specialfees/",'Tarifas Especiales'); ?></li>
               </ul>
             </li>
             <li class="dropdown <?=$menu['admin_content']?>">

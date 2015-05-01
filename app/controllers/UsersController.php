@@ -60,6 +60,11 @@ class UsersController extends BaseController
 
 
         $user-> save();
+        $Autorid = Auth::id();
+        $action = 'Crear Usuario';
+        $value = $user->house;
+        $this->setHistory($Autorid,$action,$value);          
+
         return Redirect::to('/admin/home');
     } 
 
@@ -91,4 +96,20 @@ class UsersController extends BaseController
         return View::make('users.changepass', ['response' => $response]);
     }
 
+    public function setHistory($id,$action,$value)
+    {
+        $user= DB::table('users')->where ('id','=',$id)->first();
+        $autor = $user->name;
+        $action = $action;
+        $value = $value;
+        $date = getdate();
+
+        $history = new History;
+        $history->autor = $autor;
+        $history->action = $action;
+        $history->value = $value;
+        $history->save();
+
+        return $history;
+    }
 }
