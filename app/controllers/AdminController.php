@@ -787,7 +787,7 @@ class AdminController extends BaseController {
 
         return View::make('admin.member', ['member' => $member,'menu' => $menu_content]);
     }
-public function searchSpecialFeeUsers()
+    public function searchSpecialFeeUsers()
     {
         $menu_home = array(
             'home'                  => 'active',
@@ -827,11 +827,12 @@ public function searchSpecialFeeUsers()
 
         $house = Input::get('busqueda'); 
         //$users = DB::table('users')->where('house','=',$house)->first();
-        $users = DB::table('users')
+        $user = DB::table('users')
                 ->where('house','=',$house)
                 ->leftJoin('specialfees', 'users.id', '=', 'specialfees.userid')
-                ->get();
-        return View::make('admin.user', ['results' => $results,'menu' => $menu_users]);
+                ->first();
+        //print_r($user);  die;    
+        return View::make('admin.specialfee', ['fee' => $user,'menu' => $menu_users]);
     }    
     public function custompayment()
     {
