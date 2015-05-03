@@ -831,8 +831,15 @@ class AdminController extends BaseController {
                 ->where('house','=',$house)
                 ->leftJoin('specialfees', 'users.id', '=', 'specialfees.userid')
                 ->first();
-        //print_r($user);  die;    
-        return View::make('admin.specialfee', ['fee' => $user,'menu' => $menu_users]);
+        if($user->value != NULL){
+            return View::make('admin.specialfee', ['aux' => 'fee','fee' => $user,'menu' => $menu_payments,]);
+        }else{
+          //  $user = DB::table('users')->where('house','=',$house)->first(); 
+            return View::make('admin.specialfee',['aux' => 'user','fee' => $user,'menu' =>$menu_payments]);
+        }   
+       // return View::make('admin.custompayment', ['results' => $user, 'menu' => $menu_payments]);
+
+
     }    
     public function custompayment()
     {
@@ -1450,6 +1457,78 @@ class AdminController extends BaseController {
         
 
     }    
+    public function deleteSpecialFee()
+    {
+        $menu_home = array(
+            'home'                  => 'active',
+            'admin_users'           => '',
+            'admin_content'         => '',
+            'admin_payments'        => '',
+            'privates_documents'    => ''
+        );
+        $menu_users = array(
+            'home'                  => '',
+            'admin_users'           => 'active',
+            'admin_content'         => '',
+            'admin_payments'        => '',
+            'privates_documents'    => ''
+        );
+        $menu_content = array(
+            'home'                  => '',
+            'admin_users'           => '',
+            'admin_content'         => 'active',
+            'admin_payments'        => '',
+            'privates_documents'    => ''
+        );
+        $menu_payments = array(
+            'home'                  => '',
+            'admin_users'           => '',
+            'admin_content'         => '',
+            'admin_payments'        => 'active',
+            'privates_documents'    => ''
+        );
+        $menu_documents = array(
+            'home'                  => '',
+            'admin_users'           => '',
+            'admin_content'         => '',
+            'admin_payments'        => '',
+            'privates_documents'    => 'active'
+        );
+        $house = Input::get('house');
+        $user =DB::table('users')->where('house', '=', $house)->first();
+        $id = $user->id;
+        //showUsers();
+        $specialfee = SpecialFee::where('userid','=',$id)->first();
+        if($specialfee != NULL)
+        {
+            $delete = SpecialFee::where('userid','=',$id)->delete();
+            $response = 'tarifa especial borrada';
+            $Autorid = Auth::id();
+            $action = 'Eliminar tarifa especial';
+            $value = $id;
+            $this->setHistory($Autorid,$action,$value);                
+        }else if ($specialfee == NULL)
+        {
+            $response ='no se encontro ninguna tarifa especial';
+            $adminid = Auth::id(); 
+            $man = DB::table('users')->where('id','=',$adminid)->first();
+            if($man->power == 4 || $man->power == 2)
+            {
+                $users = DB::table('users')
+                    ->leftJoin('specialfees', 'users.id', '=', 'specialfees.userid')
+                    ->get(); 
+                //echo "<pre>";print_r($users);echo "</pre>";die;
+                return View::make('admin.specialfees', ['users' => $users, 'menu' => $menu_payments]);
+            }else{
+                return View::make('admin.home',['menu' => $menu_home, 'response' => 'No tienes los permisos para acceder a esta area'] );
+            }             
+
+        }
+
+        return View::make('admin.home', ['response' => $response,'menu' => $menu_users]);  
+        
+
+    }        
 
     public function deleteMember()
     {

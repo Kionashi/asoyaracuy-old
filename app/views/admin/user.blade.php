@@ -20,12 +20,13 @@
 	        	data.addColumn('string', 'Telefono');
 	        	data.addColumn('string', 'Correo');
 	        	data.addColumn('number', 'Balance');
+	        	data.addColumn('number', 'Tarifa Especial');
 
 
 	        	data.addRows([
 	        	<?php $i = 1;?>
-          		@foreach ($results as $result)
-	        	  [<?=$i++ ?>, '<?= $result->house;?>' , '<?= $result->name;?>', '<?= $result->last_name;?>', '<?= $result->phone;?>', '<?= $result->email;?>', <?= $result->balance;?>],
+          		@foreach ($fee as $fee)
+	        	  [<?=$i++ ?>, '<?= $fee->house;?>' , '<?= $fee->name;?>', '<?= $fee->last_name;?>', '<?= $fee->phone;?>', '<?= $fee->email;?>', <?= $fee->balance;?>, <?= $fee->value;?>],
 	        	@endforeach   
 	        	  
 	        	]);
@@ -38,7 +39,7 @@
   <row>     
 	<div class="col-md-4">
 	      {{Form::open(array( 'id' => 'delete_user_form', 'action' => 'AdminController@deleteUser')) }}
-		      <input class = "hidden" type="text" value="<?= $result->house;?>" name="house"> 
+		      <input class = "hidden" type="text" value="<?= $fee->house;?>" name="house"> 
 		      
 		      <a class="btn btn-danger" href="#confirmation">Eliminar Usuario</a> 
 	      {{ Form::close() }}
@@ -62,7 +63,7 @@
      <div id="delete_popup" class="remodal" data-remodal-id="confirmation">
         <h1>Aviso</h1>
         <p>
-        El Usuario <?= $result->name;?> va a ser eliminado de forma permanente 
+        El Usuario <?= $fee->name;?> va a ser eliminado de forma permanente 
         </p>
         <button type="button" class="btn btn-info" id="btn_delete_user">Continuar</button>
         <a href="http://asoyaracuy.tepuchamoy.com.ve/admin/users"><button type="button" class="btn btn-warning">Cancelar</button></a>
