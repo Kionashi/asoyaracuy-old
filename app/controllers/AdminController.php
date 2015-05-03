@@ -685,16 +685,21 @@ class AdminController extends BaseController {
             $fee = new SpecialFee;
             $fee->value = $value;
             $fee->userid = $id;
-            $fee->save();    
+            $fee->save();   
+
+            $id = Auth::id();
+            $action = 'Crear tarifa especial';
+            $data = $user.' '.$value;
+            $this->setHistory($id,$action,$data);
+            $response = 'tarifa especial creada'; 
         }else{
+            $response = 'El usuario seleccionado ya tiene una tarifa especial asignada';
+        }
+        /*else{
             $debug->value = $value;
             $debug->save();
-        }
-        $id = Auth::id();
-        $action = 'Crear/Modificar tarifa especial';
-        $data = $user.' '.$value;
-        $this->setHistory($id,$action,$data);
-        $response = 'tarifa especial creada';
+        }*/
+
         return View::make('admin.home',['response' =>$response, 'menu' => $menu_home]);
     }     
 
@@ -831,7 +836,7 @@ class AdminController extends BaseController {
                 ->where('house','=',$house)
                 ->leftJoin('specialfees', 'users.id', '=', 'specialfees.userid')
                 ->first();
-        if($user->value != NULL){
+        if(isset($user->value)){
             return View::make('admin.specialfee', ['aux' => 'fee','fee' => $user,'menu' => $menu_payments,]);
         }else{
           //  $user = DB::table('users')->where('house','=',$house)->first(); 

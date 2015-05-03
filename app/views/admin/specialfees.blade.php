@@ -47,9 +47,5 @@
           }
       </script>
 
-    {{Form::open(array('action' => 'UsersController@showRegister')) }} 
-    {{Form::submit('Crear nuevo usuario') }} 
-    {{ Form::close() }}
-   
 
 @stop

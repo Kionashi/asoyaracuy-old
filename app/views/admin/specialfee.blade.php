@@ -93,10 +93,10 @@
 	    </script>
   <row>     
 	<div class="col-md-4">
-	      {{Form::open(array( 'id' => 'delete_specialfee_form', 'action' => 'AdminController@deleteSpecialFee')) }}
+	      {{Form::open(array( 'id' => 'delete_specialfee_form', 'action' => 'AdminController@addSpecialFee')) }}
 		      <input class = "hidden" type="text" value="<?= $fee->house;?>" name="house"> 
-		      
-		      <a class="btn btn-primary" href="#confirmation">Agregar Tarifa Especial</a> 
+		      	{{Form::text('value','',array('class' => 'form-control','placeholder' => 'Tarifa Especial'))}}
+		      <button class="btn btn-primary">Agregar Tarifa Especial</button> 
 	      {{ Form::close() }}
 	 </div>
 	         
