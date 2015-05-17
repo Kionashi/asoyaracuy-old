@@ -92,7 +92,8 @@ Route::post('managePayments','AdminController@managePayments');
 Route::post('manageMembers','AdminController@manageMembers');
 Route::post('manageDocuments','AdminController@manageDocuments');
 Route::post('sendsuggest','HomeController@sendsuggest');
-
+Route::post('sendrequest','HomeController@sendRequest');
+Route::post('updateuser','AdminController@updateUser');
 //Route::post('payment/paytransfer','HomeController@pay');
 //Route::post('payment/paycheck','HomeController@registerpaycheck');
 //Route::post('payment/paytransfer','HomeController@registerpaytransfer');

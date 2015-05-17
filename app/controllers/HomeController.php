@@ -296,20 +296,51 @@ class HomeController extends BaseController {
         $body = Input::get('body');
         $response = 'Su sugerencia ha sido enviada.';
 
-	$para      = 'bigtor.cardozo@gmail.com';
-	$titulo    = '[Contacto] - '.$subject;
-	$mensaje   = '
-	Nombre:'.$name.'
-	E-mail: '.$email.'
-	Mensaje: '.$body;
-	$cabeceras = ' ';
+		$para      = 'buzonasoyaracuy@gmail.com';
+		$titulo    = '[Contacto] - '.$subject;
+		$mensaje   = '
+		Nombre:'.$name.'
+		E-mail: '.$email.'
+		Mensaje: '.$body;
+		$cabeceras = ' ';
 
-	mail($para, $titulo, $mensaje, $cabeceras);
- 	//return Redirect::to('/home')->with('response', $response);
- 	return Redirect::action('HomeController@showHome', array('response' => $response));
- 	return Redirect::route('/home', array('response' => $response));
+		mail($para, $titulo, $mensaje, $cabeceras);
+	 	//return Redirect::to('/home')->with('response', $response);
+	 	return Redirect::action('HomeController@showHome', array('response' => $response));
+	 	return Redirect::route('/home', array('response' => $response));
         return Redirect::route('/polls', array('response' => $response));
     }
+
+    public function sendRequest()
+    {
+        $last_name = Input::get('last_name');
+        $name = Input::get('name');
+        $email = Input::get('email');
+        $ci = Input::get('ci');
+        $house = Input::get('house');
+        $request = Input::get('request');
+        $response = 'Su solicitud ha sido enviada.';
+
+		$para      = 'buzonasoyaracuy@gmail.com';
+		$titulo    = '[Solicitud] - '.$request;
+		$mensaje   = '
+		Nombre:'.$name.'
+		Apellido: '.$last_name.'
+		Cedula: '.$ci.'
+		E-mail: '.$email.'
+		Quinta: '.$house.'
+		Solicitud: '.$request.'
+
+	
+		';
+		$cabeceras = ' ';
+
+		mail($para, $titulo, $mensaje, $cabeceras);
+	 	//return Redirect::to('/home')->with('response', $response);
+	 	return Redirect::action('HomeController@showHome', array('response' => $response));
+	 	return Redirect::route('/home', array('response' => $response));
+        return Redirect::route('/polls', array('response' => $response));
+    }    
 
     public function downloadfile($id)
     {

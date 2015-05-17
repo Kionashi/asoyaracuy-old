@@ -114,7 +114,7 @@ $(function(){
 			<ul>
 				<li class="<? if(isset($menu)): echo $menu['home']; endif;?>"><a href="http://tepuchamoy.com.ve/asoyaracuy/public/home">Asoyaracuy</a></li>
 				<li class="<? if(isset($menu)): echo $menu['polls']; endif;?>"><?php echo link_to("/polls/",'Consultas/Encuestas'); ?></li>
-				<li class="<? if(isset($menu)): echo $menu['contact']; endif;?>"><?php echo link_to("/contact/",'Contacto'); ?></li>
+				<li class="<? if(isset($menu)): echo $menu['contact']; endif;?>"><a href="#request">Solicitudes en Linea</a></li>
 				<li class="<? if(isset($menu)): echo $menu['complaints']; endif;?>"><a href="#complaints">Comentarios y Sugerencias</a></li>
 				<li class="<? if(isset($menu)): echo $menu['documents']; endif;?>"><?php echo link_to("/documents/",'Documentos'); ?></a></li>
 				<li class="<? if(isset($menu)): echo $menu['account']; endif;?>"><a href="">Mi Cuenta <span class="arrow"></span></a>
@@ -170,6 +170,31 @@ $(function(){
         </p>
         <br>
     </div>
+
+    <div class="remodal" data-remodal-id="request">
+        <h1>Solicitudes en Linea</h1>
+        <p>
+            
+        {{Form::open(array('action' => 'HomeController@sendRequest')) }}
+         </br> 
+        {{Form::text('name','',array('class' => 'form-control','placeholder'=> 'Nombre'))}}
+         </br> 
+        {{Form::text('last_name','',array('class' => 'form-control','placeholder'=> 'Apellido'))}}
+         </br> 
+        {{Form::text('ci','',array('class' => 'form-control','placeholder'=> 'Cedula'))}}
+         </br> 
+        {{Form::text('email','',array('class' => 'form-control','placeholder'=> 'Correo Electronico'))}}        
+         </br> 
+        {{Form::text('house','',array('class' => 'form-control','placeholder'=> 'Quinta'))}}
+         </br> 
+        <select id="request" name="request" class = "form-control"><option value="1">Carta de Residencia</option><option value="2">Fe de Vida</option></select>  
+    </br> 
+          {{Form::submit('Enviar',array('class' => 'btn btn-lg btn-primary btn-block')) }} 
+        {{ Form::close() }}
+        </p>
+        <br>
+    </div>  
+
 	</body>
 	    <footer>
     <div class="row">
